@@ -1,6 +1,6 @@
 import processing.video.*;
 
-String source = "data/sotu2.csv";
+String source = "data/gaga.csv";
 String resolution = "minute";
 String video = "video/sotu.mov";
 
@@ -8,7 +8,6 @@ ArrayList data = new ArrayList();
 
 Histogram histogram;
 MarkerMap markerMap;
-MovieMaker movieMaker; 
 
 Boolean ready = false;
 
@@ -17,7 +16,6 @@ float currentSlot = 0;
 PImage bg;
 PFont font;
 PImage heatmap;
-PImage header;
 
 void setup()
 {
@@ -25,11 +23,9 @@ void setup()
   frameRate(60);
 
   heatmap = loadImage("/assets/gradient_5.png");
-  header = loadImage("/assets/header.png");
   bg = loadImage("/assets/sotu.png");
   font = loadFont("/data/Helvetica-Light-18.vlw");
 
-  movieMaker = new MovieMaker(this, width, height, video, 30, MovieMaker.ANIMATION, MovieMaker.LOSSLESS);
   loadData();
 }
 
@@ -57,20 +53,16 @@ void draw()
     }
     date = stripLeadingAndTrailingQuotes(slot.dateString);
     text(date, 10, height - 90);
-     
-    image(header, 5, 5, 505, 73);
+
     image(heatmap, 410, height - 104, 100, 15);
     text("Maximum cluster size: "+markerMap.clusterMax, 520, height - 90);
 
-//    if ((currentSlot / data.size() * 100) < 100)
-//    {
-      if (ready)
-      {
-        movieMaker.addFrame();
-      }
-      else {
-       // movieMaker.finish();
-      }
+    //    if ((currentSlot / data.size() * 100) < 100)
+    //    {
+    if (ready)
+    {
+      saveFrame("frames/frame_####.png");
+    }
     //}
 
     if (int(frameCount % 1) == 0 && currentSlot < data.size())
