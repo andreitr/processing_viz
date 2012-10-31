@@ -1,15 +1,13 @@
 import processing.video.*;
 
-String source = "data/superbowl_teams.csv";
+String source = "data/sample.csv";
 String resolution = "minute";
-String video = "video/superbowl_teams.mov";
 
 ArrayList data = new ArrayList();
 
 Legend legend;
 Histogram histogram;
 ClusterMap clusterMap;
-MovieMaker movieMaker; 
 
 float total_pos_sentiment = 0;
 float total_neg_sentiment = 0;
@@ -21,7 +19,6 @@ Boolean ready = false;
 float currentSlot = 0;
 
 PImage bg;
-PImage header;
 PFont font;
 PImage heatmap;
 
@@ -30,11 +27,8 @@ void setup()
   size(800, 525);
   frameRate(60);
   heatmap = loadImage("/assets/sentiment_heatmap.png");
-  header = loadImage("/assets/sentiment_header_team.png");
   bg = loadImage("/assets/sentiment.png");
   font = loadFont("/data/Helvetica-Light-18.vlw");
-
-  movieMaker = new MovieMaker(this, width, height, video, 30, MovieMaker.ANIMATION, MovieMaker.LOSSLESS);
 
   loadData();
 }
@@ -50,8 +44,6 @@ void draw()
     clusterMap.update(currentSlot / data.size() * 100);
     histogram.update(currentSlot / data.size() * 100);
 
-    image(header, 10, 10, 780, 70);
-
     TemporalSlot slot;
     String date;
     textFont(font); 
@@ -66,9 +58,9 @@ void draw()
       slot = (TemporalSlot) data.get(data.size()-1);
     }
     date = stripLeadingAndTrailingQuotes(slot.dateString);
-    
+
     date = date.substring(0, date.length() - 11)+" 2012";
-    
+
     text(date, 10, height - 90);
     text("Displaying "+(int)this.total_tweets+" #superbowl tweets", 480, height-90);
 
@@ -89,7 +81,7 @@ void draw()
     //    {
     if (ready )
     {
-      movieMaker.addFrame();
+      saveFrame("frames/frame-####.png");
     }
     else {
       // movieMaker.finish();

@@ -168,7 +168,6 @@ void generateData(HashMap<String, TemporalSlot> table)
     }
   }
   );
-
   ready = true;
 }
 
